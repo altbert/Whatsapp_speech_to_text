@@ -1,26 +1,16 @@
 const fs = require('fs');
 const qrcode = require('qrcode-terminal');
 
+const request = require('request');
+
 const { Client, LocalAuth } = require('whatsapp-web.js');
 
-const speech = require('@google-cloud/speech');
-
-// Creates a client for speech to text
-const clientSTT = new speech.SpeechClient();
-
-//Retrive already created auth file
-const SESSION_FILE_PATH = './session.json';
-let sessionCfg;
-if (fs.existsSync(SESSION_FILE_PATH)) {
-	sessionCfg = require(SESSION_FILE_PATH);
-}
 
 const client = new Client({
 	authStrategy: new LocalAuth(),
 	puppeteer: {
-		headless: false
-	},
-	session: sessionCfg
+		headless: true
+	}
 });
 
 
@@ -30,24 +20,9 @@ client.on('qr', qr => {
 	qrcode.generate(qr, {small: true});
 });
 
-//Lista blanca de contactos
+//Lista blanca de contactos. Si el contacto esta agendado entonces el script funciona
 async function ContactsWhiteList(Contact) {
-	//var phone = require('phone-regex');
-	//
-	//let chats = await client.getChatById(Contact); //debug
-
-	//var phone = require('phone-regex');
-	
-	//let ChatInfo = await client.getChatById(Contact);
 	let ContactInfo = await client.getContactById(Contact);
-
-	//if (ContactInfo.isGroup) {
-	//	console.log(JSON.stringify(ChatInfo));
-	//}
-
-	//console.log(JSON.stringify(ContactInfo));	//debug
-	//console.log(JSON.stringify(ContactInfo.name));	//debug
-	//console.log(JSON.stringify(ContactInfo.isMyContact));	//debug
 	Contact = ContactInfo.name
 
 	if (ContactInfo.isMyContact) {
@@ -85,54 +60,14 @@ async function AutomatedMessages(message) {
 		message.reply(quotedMsg.body);
 		// client.sendMessage(message.from, 'test');
 	}
-
-	// if(message.body.includes("prueba")) {
-	// 	message.reply('Ahh mira voos');
-	// 	chat.markUnread();
-	// }
-	// if(message.body === 'Probando') {
-	// 	client.sendMessage(message.from, 'Probame esta!');
-	// 	chat.markUnread();
-	// }
-	// if(message.body === 'Chau') {
-	// 	client.sendMessage(message.from, 'cha!');
-	// 	chat.markUnread();
-	// }
-	// if(message.body === '!ayuda') {
-	// 	client.sendMessage(message.from, '*Este es un mensaje de ayuda*.\n\n\nComandos que se pueden pueden utilizar:\n\n*!ayuda*: Muestra este mensaje de ayuda\n\n*!tran*: Transcribe un mensaje de audio a texto\nresponder al audio enviado con *!tran*');
-	// 	chat.markUnread();
-	// }
-
 }
 
 //TODO: implementar la descarga de media en una funcion
 async function DownloadMedia(message, formattedDate, formattedTime, Contact) {
 	const attachmentData = await message.downloadMedia();
-	//console.log(attachmentData); //debug
-	//message.reply(`
-	//	*Media info*
-	//	MimeType: ${attachmentData.mimetype}
-	//	Filename: ${attachmentData.filename}
-	//	Data (length): ${attachmentData.data.length} bytes
-	//`);
-	//TODO: Crea directiorio si es que no existe
-	//if (!fs.existsSync("./Media/"+Contact+"/")){
-	//	fs.mkdirSync("./Media/"+Contact+"/");
-	//}
-	//TODO: Mandar una solicitud de no lectura para que no quede el mensaje sin leer
-	//Nombre del archivo a guardar
-	var filename_save = formattedDate+"_"+formattedTime+"-"+"("+Contact+")"+"."+attachmentData.mimetype.split("/")[1].split(";")[0]
-	
-	//Guarda el archivo
-	fs.writeFileSync("./Media/"+filename_save, attachmentData.data, "base64");
-	//Mensaje si el mensaje es un archivo de media
+
 	if (message.type.includes("ptt") || message.type.includes("audio")) {
-		var message_text = message.body+'🎤 \x1b[34mAudio\x1b[0m - '+filename_save
 		SpeechToTextTranscript(attachmentData.data, message);
-	} else if (message.type.includes("video")) {
-		var message_text = message.body+'📼 \x1b[34mVideo\x1b[0m - '+filename_save
-	} else if (message.type.includes("image")) {
-		var message_text = message.body+'🖼️ \x1b[34mImage\x1b[0m - '+filename_save
 	}
 
 	return message_text;
@@ -140,39 +75,26 @@ async function DownloadMedia(message, formattedDate, formattedTime, Contact) {
 
 //Text to speech function
 async function SpeechToTextTranscript(base64data, message) {
-	// The audio file's encoding, sample rate in hertz, and BCP-47 language code
-	const config = {
-		encoding: 'OGG_OPUS',
-		sampleRateHertz: 16000,
-		languageCode: 'es-AR',
-		model: 'default',
-		recordingDeviceType: 'SMARTPHONE',
-		microphoneDistance: 'NEARFIELD',
-	};
-	
-	const audio = {
-		content: base64data,
-	};
-  
-	const request = {
-		audio: audio,
-		config: config,
-		};
+	const decodedBuffer = Buffer.from(base64data, 'base64');
 
-	// Detects speech in the audio file
-	const [response] = await clientSTT.recognize(request);
-	const transcription = response.results.map(result => result.alternatives[0].transcript).join('\n');
-	var confidence2 = response.results.map(result => result.alternatives[0].confidence);
-	confidence2 = parseFloat(confidence2)*100; //da el valor en porcentaje
-	console.log(confidence2)
-	console.log(`Transcription: ${transcription}`);
-	if (confidence2 >= 90.0) {
-		//message.reply("*Esto es un mensaje automatico.*\n_Transcripcion del audio:_\n\n"+transcription+"\n\nConfidencia de la transcripcion: %.0f %",parseFloat(confidence2)*100);
-
-		message.reply("*Esto es un mensaje automatico.*\n_Transcripcion del audio:_\n\n"+transcription+"\n\n\n_Confidencia de la transcripcion: "+confidence2.toFixed()+"%_");
-		let chat = await message.getChat();
-		chat.markUnread();
-	}
+	// Send the decoded binary file to the Flask API
+	request.post({
+	  url: 'http://127.0.0.1:5000',
+	  formData: {
+		file: {
+		  value: decodedBuffer,
+		  options: {
+			filename: message.from
+		  }
+		}
+	  }
+	}, function(err, httpResponse, body) {
+	  if (err) {
+		console.error(err);
+	  } else {
+		console.log('Upload successful! Server responded with:', body);
+	  }
+	});
 }
 
 //Log successful client connection
@@ -213,31 +135,10 @@ client.on('message', async message => {
 		//Descarga los archivos de media
 		if (message.hasMedia) {
 			const attachmentData = await message.downloadMedia();
-			//console.log(attachmentData); //debug
-			//message.reply(`
-			//	*Media info*
-			//	MimeType: ${attachmentData.mimetype}
-			//	Filename: ${attachmentData.filename}
-			//	Data (length): ${attachmentData.data.length} bytes
-			//`);
-			//TODO: Crea directiorio si es que no existe
-			//if (!fs.existsSync("./Media/"+Contact+"/")){
-			//	fs.mkdirSync("./Media/"+Contact+"/");
-			//}
-			//TODO: Mandar una solicitud de no lectura para que no quede el mensaje sin leer
-			//Nombre del archivo a guardar
-			var filename_save = formattedDate+"_"+formattedTime+"-"+"("+Contact+")"+"."+attachmentData.mimetype.split("/")[1].split(";")[0]
-			
-			//Guarda el archivo
-			fs.writeFileSync("./Media/"+filename_save, attachmentData.data, "base64");
 			//Mensaje si el mensaje es un archivo de media
 			if (message.type.includes("ptt") || message.type.includes("audio")) {
-				var message_text = message.body+'🎤 \x1b[34mAudio\x1b[0m - '+filename_save
+				var message_text = message.body+'🎤 \x1b[34mAudio\x1b[0m - '
 				SpeechToTextTranscript(attachmentData.data, message);
-			} else if (message.type.includes("video")) {
-				var message_text = message.body+'📼 \x1b[34mVideo\x1b[0m - '+filename_save
-			} else if (message.type.includes("image")) {
-				var message_text = message.body+'🖼️ \x1b[34mImage\x1b[0m - '+filename_save
 			}
 		}
 		//TODO: Convinar esta funcion con la de arriba

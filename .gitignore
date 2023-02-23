@@ -9,3 +9,4 @@
 package-lock.json
 session.json
 node_modules
+api_test.py
