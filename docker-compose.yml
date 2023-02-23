@@ -4,8 +4,8 @@ services:
   whisper_api:
     build: ./api/
     container_name: "wspr_api"
-    volumes:
-      - ./api/.cache:/usr/src/app/.cache
+    # volumes:
+    #   - ./api/.cache:/usr/src/app/.cache
     networks:
       mynetwork:
         ipv4_address: 172.25.0.2
@@ -13,8 +13,8 @@ services:
   node:
     build: ./node
     container_name: node
-    # volumes:
-    #   - ./node:/app/
+    volumes:
+       - ./node/data:/app/data/
     networks:
       mynetwork:
         ipv4_address: 172.25.0.3
