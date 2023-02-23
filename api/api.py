@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def handler():
-    if not model:
-        model = whisper.load_model(request_model)
+    # if not model:
+    #     model = whisper.load_model(request_model)
         
     if not request.files:
         # If the user didn't submit any files, return a 400 (Bad Request) error.

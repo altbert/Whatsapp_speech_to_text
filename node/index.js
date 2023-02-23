@@ -62,17 +62,6 @@ async function AutomatedMessages(message) {
 	}
 }
 
-//TODO: implementar la descarga de media en una funcion
-async function DownloadMedia(message, formattedDate, formattedTime, Contact) {
-	const attachmentData = await message.downloadMedia();
-
-	if (message.type.includes("ptt") || message.type.includes("audio")) {
-		SpeechToTextTranscript(attachmentData.data, message);
-	}
-
-	return message_text;
-}
-
 //Text to speech function
 async function SpeechToTextTranscript(base64data, message) {
 	const decodedBuffer = Buffer.from(base64data, 'base64');
@@ -84,7 +73,7 @@ async function SpeechToTextTranscript(base64data, message) {
 		file: {
 		  value: decodedBuffer,
 		  options: {
-			filename: message.from
+			filename: message.from + message.timestamp
 		  }
 		}
 	  }

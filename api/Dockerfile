@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Whisper
-RUN pip install -U openai-whisper && pip install flask && gunicorn
+RUN pip install -U openai-whisper && pip install flask && pip install gunicorn
 
 
 # Install model files
