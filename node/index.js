@@ -104,19 +104,7 @@ client.on('ready', () => {
 
 //Main
 client.on('message', async message => {
-
-	//let chats = await client.getChats(); //debug
-	//console.log(JSON.stringify(chats));	//debug
-
-	//Retrive variables de contacto o no contacto
-	//Lista blanca de contactos, descomentar para permitir solo los contactos de la lista
 	const [Contact, Listed] = await ContactsWhiteList(message.from);
-	//Lista negra de contactos, descomentar para permitir todos los contactos que no esten en la lista
-	//const [Contact, Listed] = ContactsBlackList(message);
-	//var Listed = ( 1 = Listed | 0 = Not Listed)
-
-	//console.log(Contact,Listed) //debug
-
 	if (Listed === 1) {
 		//Mensajes automatizados
 		AutomatedMessages(message);
@@ -128,9 +116,6 @@ client.on('message', async message => {
 		//console.log(formattedTime,formattedDate) //debug
 
 		var message_text = message.body //Variable en donde se guarda el texto del mensaje
-		//if (message.hasMedia) {
-		//	var message_text = DownloadMedia(message, formattedDate, formattedTime, Contact);
-		//}
 
 		//Descarga los archivos de media
 		if (message.hasMedia) {

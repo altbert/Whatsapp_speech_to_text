@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Whisper
-RUN pip install -U openai-whisper && pip install flask
+RUN pip install -U openai-whisper && pip install flask && gunicorn
 
 
 # Install model files
@@ -22,4 +22,6 @@ WORKDIR /usr/src/app
 
 COPY api.py .
 
-CMD [ "python3" "./api.py" ]
+EXPOSE 5000
+
+CMD [ "gunicorn", "api:app", "-w", "2", "--threads", "2", "-b", "0.0.0.0:5000" ]
