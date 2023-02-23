@@ -6,7 +6,19 @@ services:
     container_name: "wspr_api"
     volumes:
       - ./api/.cache:/usr/src/app/.cache
+    networks:
+      interconect:
+        ipv4_address: 172.33.0.10
+
   node:
     build: ./node
     container_name: node
-
+    volumes:
+      - .:/app/
+    networks:
+      interconect:
+        ipv4_address: 172.33.0.20
+networks:
+  interconect:
+    name: interconect
+    subnet: 172.33.0.0/32
