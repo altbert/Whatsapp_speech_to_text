@@ -69,7 +69,7 @@ async function SpeechToTextTranscript(base64data, message) {
 
 	// Send the decoded binary file to the Flask API
 	request.post({
-	  url: 'http://172.33.0.10:5000',
+	  url: 'http://172.25.0.2:5000',
 	  formData: {
 		file: {
 		  value: decodedBuffer,
