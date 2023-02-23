@@ -13,8 +13,8 @@ services:
   node:
     build: ./node
     container_name: node
-    volumes:
-      - .:/app/
+    # volumes:
+    #   - ./node:/app/
     networks:
       mynetwork:
         ipv4_address: 172.25.0.3
