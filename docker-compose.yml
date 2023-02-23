@@ -4,7 +4,9 @@ services:
   whisper_api:
     build: ./api/
     port: 5555
-   container_name: "wspr_api"
+    container_name: "wspr_api"
+    volumes:
+      - ./api/.cache:/usr/src/app/
   node:
     build: ./node
     image: imageName
