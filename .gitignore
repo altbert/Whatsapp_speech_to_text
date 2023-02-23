@@ -1,0 +1,11 @@
+*ogg
+*webp
+*jpeg
+*jpg
+*pdf
+*mp4
+.wwebjs_auth
+*txt
+package-lock.json
+session.json
+node_modules
