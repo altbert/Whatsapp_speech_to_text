@@ -16,7 +16,7 @@ RUN whisper --model base dummy.wav; exit 0
 # RUN whisper --model small dummy.wav; exit 0
 # RUN whisper --model medium dummy.wav; exit 0
 # RUN whisper --model large dummy.wav; exit 0
-# RUN whisper --model large-v2 dummy.wav; exit 0
+# RUN whisper --model l2arge-v2 dummy.wav; exit 0
 
 WORKDIR /usr/src/app
 
@@ -24,4 +24,4 @@ COPY api.py .
 
 EXPOSE 5000
 
-CMD [ "gunicorn", "api:app", "-w", "2", "--threads", "2", "-b", "0.0.0.0:5000" ]
+CMD [ "gunicorn", "api:app", "-b", "0.0.0.0:5000" ]

@@ -7,7 +7,8 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 
 
 const client = new Client({
-	authStrategy: new LocalAuth({ dataPath: "/app/data/" }),
+	// authStrategy: new LocalAuth({ dataPath: "/app/data/" }),
+	authStrategy: new LocalAuth(),
 	puppeteer: {
 		headless: true,
 		args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -56,7 +57,14 @@ async function AutomatedMessages(message) {
 	let chat = await message.getChat();
 
 	if(message.body == '!tran' && message.hasQuotedMsg){
-		const quotedMsg = await message.getQuotedMessage();
+		const quotedMsgTemp = await message.getQuotedMessage();
+		let quotedMsg = new Message(client, {
+			id: { _serialized: quotedMsgTemp.id },
+			hasMedia: true, // --> IMPORTANT
+		  });
+		
+		  const media = await quotedMsg.downloadMedia();
+		
 		// console.log("Text: "+quotedMsg.body);
 		message.reply(quotedMsg.body);
 		// client.sendMessage(message.from, 'test');
@@ -69,8 +77,9 @@ async function SpeechToTextTranscript(base64data, message) {
 
 	// Send the decoded binary file to the Flask API
 	request.post({
-	  url: 'http://172.25.0.2:5000',
-	  formData: {
+		// url: 'http://172.25.0.2:5000',
+		url: 'http://127.0.0.1:5000',
+		formData: {
 		file: {
 		  value: decodedBuffer,
 		  options: {
@@ -79,11 +88,18 @@ async function SpeechToTextTranscript(base64data, message) {
 		}
 	  }
 	}, function(err, httpResponse, body) {
-	  if (err) {
-		console.error(err);
-	  } else {
-		console.log('Upload successful! Server responded with:', body);
-	  }
+		if (err) {
+			console.error(err);
+		} else {
+			console.log('Upload successful! Server responded with:', body);
+			
+			const data = JSON.parse(body);
+			for (const result of data.results) {
+				const transcript = result.transcript;
+				console.log(transcript);
+				message.reply("Esto es una transcripcion automatica del audio:\n\n"+transcript);
+			}
+		}
 	});
 }
 
@@ -97,7 +113,7 @@ client.on('message', async message => {
 	const [Contact, Listed] = await ContactsWhiteList(message.from);
 	if (Listed === 1) {
 		//Mensajes automatizados
-		AutomatedMessages(message);
+		// AutomatedMessages(message);
 
 		//Retrive fecha y hora
 		//Genera una fecha y una hora basado en el timestamp del mensaje (unix time)
@@ -106,7 +122,7 @@ client.on('message', async message => {
 		//console.log(formattedTime,formattedDate) //debug
 
 		var message_text = message.body //Variable en donde se guarda el texto del mensaje
-
+		let chat = message.getChat();
 		//Descarga los archivos de media
 		if (message.hasMedia) {
 			const attachmentData = await message.downloadMedia();
@@ -114,6 +130,7 @@ client.on('message', async message => {
 			if (message.type.includes("ptt") || message.type.includes("audio")) {
 				var message_text = message.body+'🎤 \x1b[34mAudio\x1b[0m - '
 				SpeechToTextTranscript(attachmentData.data, message);
+				(await chat).markUnread();
 			}
 		}
 		//TODO: Convinar esta funcion con la de arriba
