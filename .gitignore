@@ -10,3 +10,5 @@ package-lock.json
 session.json
 node_modules
 api_test.py
+__pycache__
+data
