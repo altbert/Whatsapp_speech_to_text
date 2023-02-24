@@ -12,7 +12,7 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 // Required for ENV Setup
 const process = require('node:process');
 
-// Setup env variables so it can run on docker and also as standalone
+// Setup ENV variables so it can run on docker and also as standalone
 if (process.env.HOST_ADDRESS && process.env.CHROME_DATA_PATH) {
 	apiHost = process.env.HOST_ADDRESS;
 	dataPath = process.env.CHROME_DATA_PATH;
@@ -29,6 +29,9 @@ const client = new Client({
 		args: ['--no-sandbox', '--disable-setuid-sandbox']
 	}
 });
+
+// Header that the reply message will have, following by the transcription
+const responseMsgHeader = "This is an automatic transcription of the voice message:"
 
 // Initialize client
 client.initialize();
@@ -146,7 +149,7 @@ async function SpeechToTextTranscript(base64data, message) {
 			for (const result of data.results) {
 				const transcript = result.transcript;
 				console.log(transcript);
-				message.reply("Esto es una transcripcion automatica del audio:\n\n"+transcript);
+				message.reply(responseMsgHeader + "\n\n" + transcript);
 			}
 		}
 	});
