@@ -19,6 +19,17 @@ If you want to contribute just send a pull request
   - HOST_ADDRESS=whisper_api
   - CHROME_DATA_PATH="/app/data/"
 - If you want to use the code outside docker, you just have to edit the env variables in the index.js file.
+- If you are using a GPU add and edit, to your needs, the following code to the **whisper_api** container   
+    ```
+        deploy:
+        resources:
+            reservations:
+            devices:
+                - driver: nvidia
+                count: 1
+                capabilities: [gpu]
+    ```
+
 
 ### TODO
 - [ ] Only transcribe if the audio is replied with "!tran"
