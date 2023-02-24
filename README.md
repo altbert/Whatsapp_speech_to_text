@@ -23,3 +23,4 @@ If you want to contribute just send a pull request
 ### TODO
 - [ ] Only transcribe if the audio is replied with "!tran"
 - [ ] Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.
+- [ ] Save the models locally
