@@ -16,7 +16,7 @@ RUN whisper --model tiny dummy.wav; exit 0
 # RUN whisper --model small dummy.wav; exit 0
 # RUN whisper --model medium dummy.wav; exit 0
 # RUN whisper --model large dummy.wav; exit 0
-# RUN whisper --model l2arge-v2 dummy.wav; exit 0
+# RUN whisper --model large-v2 dummy.wav; exit 0
 
 WORKDIR /usr/src/app
 
