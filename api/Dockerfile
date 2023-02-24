@@ -12,7 +12,7 @@ RUN pip install -U openai-whisper && pip install flask && pip install gunicorn
 
 # Install model files
 RUN whisper --model tiny dummy.wav; exit 0
-RUN whisper --model base dummy.wav; exit 0
+# RUN whisper --model base dummy.wav; exit 0
 # RUN whisper --model small dummy.wav; exit 0
 # RUN whisper --model medium dummy.wav; exit 0
 # RUN whisper --model large dummy.wav; exit 0
