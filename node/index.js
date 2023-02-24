@@ -7,8 +7,8 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 
 
 const client = new Client({
-	// authStrategy: new LocalAuth({ dataPath: "/app/data/" }),
-	authStrategy: new LocalAuth(),
+	authStrategy: new LocalAuth({ dataPath: "/app/data/" }),
+	// authStrategy: new LocalAuth(),
 	puppeteer: {
 		headless: true,
 		args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -77,8 +77,8 @@ async function SpeechToTextTranscript(base64data, message) {
 
 	// Send the decoded binary file to the Flask API
 	request.post({
-		// url: 'http://172.25.0.2:5000',
-		url: 'http://127.0.0.1:5000',
+		url: 'http://172.25.0.2:5000',
+		// url: 'http://127.0.0.1:5000',
 		formData: {
 		file: {
 		  value: decodedBuffer,
