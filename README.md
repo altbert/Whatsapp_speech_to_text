@@ -1,10 +1,12 @@
 # Whatsapp Speech To Text
-Speech to text in Whatsapp using [Whisper](https://github.com/openai/whisper) and [Whatsapp-Web.js](https://github.com/pedroslopez/whatsapp-web.js)
-Originally the program was using Google Cloud Speech.
+Speech to text in Whatsapp using [Whisper](https://github.com/openai/whisper) and [Whatsapp-Web.js](https://github.com/pedroslopez/whatsapp-web.js)   
+Originally the program was using Google Cloud Speech.   
+   
 
 ### Description
-Once authenticated on Whatsapp Web, the worker will transcribe all messages received from a contact in your contact book.
-If you want to contribute just send a pull request
+Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all messages received from a contact in your contact book.   
+If you want to contribute just send a pull request   
+   
 
 ### Usage
 - To build the images run ```docker-compose build```
@@ -17,3 +19,7 @@ If you want to contribute just send a pull request
   - HOST_ADDRESS=whisper_api
   - CHROME_DATA_PATH="/app/data/"
 - If you want to use the code outside docker, you just have to edit the env variables in the index.js file.
+
+### TODO
+- [ ] Only transcribe if the audio is replied with "!tran"
+- [ ] Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.
