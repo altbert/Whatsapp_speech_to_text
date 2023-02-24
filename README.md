@@ -1,4 +1,4 @@
-Speech to text in whatsapp with google api and whatsapp-web.js[https://github.com/pedroslopez/whatsapp-web.js]
+Speech to text in whatsapp with google api and [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js)
 
 Dependencies
 
