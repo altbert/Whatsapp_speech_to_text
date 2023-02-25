@@ -38,7 +38,7 @@ Just reply to the audio message you want to transcribe with **!tran**
 - Editing the variables response ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can edit the header of the automatic response.
 
 ### TODO
-- [x] Only transcribe if the audio is replied with "!tran"
-- [x] Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.
+- [x] ~~Only transcribe if the audio is replied with "!tran"~~
+- [x] ~~Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.~~
 - [ ] Save the models locally
 - [ ] Maybe use https://github.com/ahmetoner/whisper-asr-webservice as the api
