@@ -29,7 +29,7 @@ If you want to contribute just send a pull request
                 count: 1
                 capabilities: [gpu]
     ```
-
+- Editing the variables response ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can edit the header of the automatic response.
 
 ### TODO
 - [ ] Only transcribe if the audio is replied with "!tran"
