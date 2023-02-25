@@ -11,8 +11,10 @@ Originally the program was using Google Cloud Speech.
 Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all messages received from a contact in your contact book, and you.   
 If you want to contribute just send a pull request   
    
-
 ### Usage
+Just reply to the audio message you want to transcribe with **!tran**
+
+### Running the server
 - To build the images run ```docker-compose build```
 - To run the containers run ```docker-compose up``` (Do not detach, the qr will be displayed in the terminal)
 
@@ -36,6 +38,7 @@ If you want to contribute just send a pull request
 - Editing the variables response ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can edit the header of the automatic response.
 
 ### TODO
-- [ ] Only transcribe if the audio is replied with "!tran"
-- [ ] Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.
+- [x] Only transcribe if the audio is replied with "!tran"
+- [x] Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.
 - [ ] Save the models locally
+- [ ] Maybe use https://github.com/ahmetoner/whisper-asr-webservice as the api

@@ -96,42 +96,42 @@ function GetDate(timestamp) {
 
 // TODO: when replied with !tran, the worker will transcribe only the audio quoted
 async function AutomatedMessages(message) {
+	const chat = await message.getChat();
 
-	if(message.body == '!tran' && message.hasQuotedMsg){		
+	if(message.body == '!tran' && message.hasQuotedMsg){
 		const quotedMsg = await message.getQuotedMessage();
-		// Check if the quoted message has media
-		if (quotedMsg.hasMedia) {
-		  // Download the media to a buffer
-		  const mediaData = await quotedMsg.downloadMedia();
-		  // Do something with the media data, e.g. save it to a file
-		  console.log(quotedMsg.chatId);
-		  message.reply("mediaData.body", );
-		}
-	}
 
-	let chat = message.getChat();
-	//Descarga los archivos de media
-	if (message.hasMedia) {
-	 	const attachmentData = await message.downloadMedia();
-	 	//Mensaje si el mensaje es un archivo de media
-	 	if (message.type.includes("ptt") || message.type.includes("audio")) {
-	 		// SpeechToTextTranscript(attachmentData.data, message);
-			SpeechToTextTranscript(attachmentData.data, message)
-				.then((body) => {
-					console.log(body); // Handle the returned data here
-					const data = JSON.parse(body);
-					for (const result of data.results) {
-						const transcript = result.transcript;
-						console.log(transcript);
-						message.reply(responseMsgHeader + "\n\n" + transcript);
-					}
-				})
-				.catch((err) => {
-					console.error(err); // Handle the error here
-					message.reply(responseMsgHeaderError);
-				});
-	 		(await chat).markUnread();
-	 	}
+		const messageId = quotedMsg.id._serialized	
+	
+		if (quotedMsg.hasMedia) {
+			if (quotedMsg.type.includes("ptt") || quotedMsg.type.includes("audio")) {
+				const attachmentData = await quotedMsg.downloadMedia();
+				if (attachmentData) {
+					SpeechToTextTranscript(attachmentData.data, message)
+					.then((body) => {
+						console.log(body); // Handle the returned data here
+						const data = JSON.parse(body);
+						for (const result of data.results) {
+							const transcript = result.transcript;
+							// console.log(transcript);
+							// message.reply(responseMsgHeader + "\n\n" + transcript);
+							
+							chat.sendMessage(responseMsgHeader + "\n\n" + transcript, {
+								quotedMessageId: messageId
+							});
+						}
+					})
+					.catch((err) => {
+						console.error(err); // Handle the error here
+						chat.sendMessage(responseMsgHeaderError, {
+							quotedMessageId: messageId
+						});
+					});
+				} else {
+					message.reply("The file couldn't be fetched");
+				}
+			}
+		}
 	}
 }
 
