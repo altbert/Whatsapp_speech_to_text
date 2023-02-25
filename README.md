@@ -4,7 +4,7 @@ Originally the program was using Google Cloud Speech.
    
 
 ### Description
-Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all messages received from a contact in your contact book.   
+Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all messages received from a contact in your contact book, and you.   
 If you want to contribute just send a pull request   
    
 
