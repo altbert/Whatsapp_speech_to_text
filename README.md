@@ -25,7 +25,7 @@ Just reply to the audio message you want to transcribe with **!tran**
   - HOST_ADDRESS=whisper_api
   - CHROME_DATA_PATH="/app/data/"
 - If you want to use the code outside docker, you will need to edit the env variables in the index.js file, to point to your api address.
-- If you are using a GPU add and edit, to your needs, the following code to the **whisper_api** container   
+- If you are using a GPU add and edit, to your needs, the following code in the **whisper_api** container   
     ``` yml
         deploy:
         resources:
