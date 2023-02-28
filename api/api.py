@@ -1,8 +1,10 @@
 from flask import Flask, abort, request
 import whisper
 from tempfile import NamedTemporaryFile
+from os import environ
 
 # Load the Whisper model:
+model_version = environ[MODEL_VERSION]
 model = whisper.load_model('tiny')
 
 app = Flask(__name__)
