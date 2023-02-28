@@ -1,13 +1,18 @@
 version: "3.4"
 
+ x-shared-variables: &shared-variables
+   MODEL_VERSION: "tiny"
+   ANOTHER_VARIABLE: another_value
+
 services:
   whisper_api:
-    build: ./api/
+    build:
+      context: ./api
+      args: *shared-variables
     container_name: "whisper_api"
     # volumes:
     #   - ./api/.cache:/usr/src/app/.cache
-    args:
-      MODEL_VERSION: "tiny"
+    environment: *shared-variables
     networks:
       mynetwork:
         ipv4_address: 172.25.0.2
