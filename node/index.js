@@ -13,8 +13,8 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const process = require('node:process');
 
 // Setup ENV variables so it can run on docker and also as standalone
-if (process.env.HOST_ADDRESS && process.env.CHROME_DATA_PATH) {
-	apiHost = process.env.HOST_ADDRESS;
+if (process.env.API_ADDRESS && process.env.CHROME_DATA_PATH) {
+	apiHost = process.env.API_ADDRESS;
 	dataPath = process.env.CHROME_DATA_PATH;
 } else {
 	apiHost = "127.0.0.1";

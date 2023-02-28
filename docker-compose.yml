@@ -1,16 +1,13 @@
 version: "3.4"
 
-# Variables shared between containers
-env-shared-variables: &shared-variables
-  MODEL_VERSION: tiny
-
 services:
   whisper_api:
     build: ./api/
     container_name: "whisper_api"
     # volumes:
     #   - ./api/.cache:/usr/src/app/.cache
-    environment: *shared-variables
+    environment:
+      MODEL_VERSION: "tiny"
     networks:
       mynetwork:
         ipv4_address: 172.25.0.2
@@ -23,8 +20,7 @@ services:
     depends_on:
       - whisper_api
     environment:
-      <<: *shared-variables
-      HOST_ADDRESS: whisper_api
+      API_ADDRESS: whisper_api
       CHROME_DATA_PATH: "/app/data/"
     networks:
       mynetwork:
