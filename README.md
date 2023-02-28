@@ -13,7 +13,7 @@ Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, a
 If you want to contribute just send a pull request   
    
 ### Usage
-Just reply to the audio message you want to transcribe with **!tran**
+Just reply to the voice message you want to transcribe with **!tran**
 
 ### Running the server
 - To build the images run ```docker-compose build```
@@ -42,6 +42,7 @@ Just reply to the audio message you want to transcribe with **!tran**
 - [x] ~~Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.~~
 - [ ] Save the models locally
 - [ ] Maybe use https://github.com/ahmetoner/whisper-asr-webservice as the api
+- [ ] Add environment file.
 
 ### BUGs
-- For now files that are older than the session can't be fetched. Solution might be to retrieve the file with some and cache it, with some function from Whatsapp-Web.js
+- For now files that are older than the session can't be fetched. Solution might be to retrieve the file with some function and cache it.
