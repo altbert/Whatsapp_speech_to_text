@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install -U openai-whisper && pip install flask && pip install gunicorn
 
 
-# Download model file (SETUP MODEL IN docker-compose.yml FILE)
+# Download model file (SETUP MODEL VERSION IN docker-compose.yml FILE)
 RUN whisper --model ${MODEL_VERSION} dummy.wav; exit 0
 
 WORKDIR /usr/src/app

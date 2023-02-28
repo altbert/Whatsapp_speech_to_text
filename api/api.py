@@ -3,8 +3,9 @@ import whisper
 from tempfile import NamedTemporaryFile
 from os import environ
 
-# Load the Whisper model:
+# Gets the env variable configured in the docker-compose.yml file
 model_version = environ['MODEL_VERSION']
+# Load the Whisper model:
 model = whisper.load_model('tiny')
 
 app = Flask(__name__)
