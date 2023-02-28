@@ -2,7 +2,6 @@ version: "3.5"
 
 x-shared-variables: &shared-variables
   MODEL_VERSION: "tiny"
-  ANOTHER_VARIABLE: another_value
 
 services:
   whisper_api:

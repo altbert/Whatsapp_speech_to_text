@@ -20,7 +20,7 @@ Just reply to the audio message you want to transcribe with **!tran**
 - To run the containers run ```docker-compose up``` (Do not detach, the qr will be displayed in the terminal)
 
 ### Configuration
-- To chose the model you want to use edit the env variable called **MODEL_VERSION** located in the docker-compose.yml file under the whisper_api container config. Default model: **tiny**
+- To chose the model you want to use edit the variable called **MODEL_VERSION** under **x-shared-variables** inside the file docker-compose.yml. Default model: **tiny**
 - To configure the path and the api address edit the environment variables inside the ```docker-compose.yml``` file. The default values are: 
   - HOST_ADDRESS=whisper_api
   - CHROME_DATA_PATH="/app/data/"
