@@ -46,4 +46,4 @@ Just reply to the voice message you want to transcribe with **!tran**
 
 ### BUGs
 - For now files that are older than the session can't be fetched. Solution might be to retrieve the file with some function and cache it.
-  - **UPDATE:** Due to the (inability to retrieve messages by id)[https://github.com/pedroslopez/whatsapp-web.js/issues/254] this bug cannot be fixed for now. Maybe there is another solution, but i don't see it.
+  - **UPDATE:** Due to the [inability of the library whatsapp-web.js to retrieve messages by id](https://github.com/pedroslopez/whatsapp-web.js/issues/254) this bug cannot be fixed for now. Maybe there is another solution, but i don't see it.
