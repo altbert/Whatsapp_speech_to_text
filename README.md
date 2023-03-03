@@ -8,8 +8,11 @@ Originally the program was using Google Cloud Speech.
    
    
 ### Description
-Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all voice messages that you reply with "!tran". For now it's only configured to transcribe from contacts saved in your contact book.  
+Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all voice messages that you reply with "!tran".  
+For now it's only configured to transcribe from contacts saved in your contact book.  
      
+If you you don't want to host the model directly in your computer, you can use the branch main_openai_api. This branch uses OpenAI API to transcribe the audio.
+   
 If you want to contribute just send a pull request   
    
 ### Usage
