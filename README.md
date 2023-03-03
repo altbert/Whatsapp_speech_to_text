@@ -8,7 +8,8 @@ Originally the program was using Google Cloud Speech.
    
    
 ### Description
-Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all voice messages that you reply with "!tran". For now it's only configured to transcribe from contacts saved in your contact book.  
+Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper API, all voice messages that you reply with "!tran".  
+For now it's only configured to transcribe from contacts saved in your contact book.  
      
 If you want to contribute just send a pull request   
    
@@ -20,29 +21,15 @@ Just reply to the voice message you want to transcribe with **!tran**
 - To run the containers run ```docker-compose up``` (Do not detach, the qr will be displayed in the terminal)
 
 ### Configuration
-- To chose the model you want to use edit the variable called **MODEL_VERSION** under **x-shared-variables** inside the file docker-compose.yml. Default model: **tiny**
-- To configure the path and the api address edit the environment variables inside the ```docker-compose.yml``` file. The default values are: 
-  - HOST_ADDRESS=whisper_api
-  - CHROME_DATA_PATH="/app/data/"
+- To configure the path where chrome session will reside, the Docker api address and the OpenAI key edit the environment variables inside the ```docker-compose.yml``` file. The default values are: 
+  - HOST_ADDRESS: whisper_api
+  - CHROME_DATA_PATH: "/app/data/"
+  - OPENAI_API_KEY: "YOUR-OPEANAI-API-KEY"
 - If you want to use the code outside docker, you will need to edit the env variables in the index.js file, to point to your api address.
-- If you are using a GPU add and edit, to your needs, the following code in the **whisper_api** container   
-    ``` yml
-        deploy:
-        resources:
-            reservations:
-            devices:
-                - driver: nvidia
-                count: 1
-                capabilities: [gpu]
-    ```
 - Editing the variables response ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can edit the header of the automatic response.
 
 ### TODO
-- [x] ~~Only transcribe if the audio is replied with "!tran"~~
-- [x] ~~Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.~~
-- [ ] Save the models locally
-- [ ] Maybe use https://github.com/ahmetoner/whisper-asr-webservice as the api
-- [ ] Add environment file.
+[ ] As the python api it's useless here, because we are no loading the models in our computer and just retrieving the data from the OpenAI API. All of this can be done from inside de node index.js file
 
 ### BUGs
 - For now files that are older than the session can't be fetched. Solution might be to retrieve the file with some function and cache it.

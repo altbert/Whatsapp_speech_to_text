@@ -1,12 +1,8 @@
 from flask import Flask, abort, request
-import whisper
 from tempfile import NamedTemporaryFile
 from os import environ
-
-# Gets the env variable configured in the docker-compose.yml file
-model_version = environ['MODEL_VERSION']
-# Load the Whisper model:
-model = whisper.load_model('tiny')
+import openai
+import ffmpeg
 
 app = Flask(__name__)
 
@@ -26,12 +22,16 @@ def handler():
     for filename, handle in request.files.items():
         # Create a temporary file.
         # The location of the temporary file is available in `temp.name`.
-        temp = NamedTemporaryFile()
+        temp_in = NamedTemporaryFile(suffix=".opus")
+        temp_out = NamedTemporaryFile(suffix=".mp3")
         # Write the user's uploaded file to the temporary file.
         # The file will get deleted when it drops out of scope.
-        handle.save(temp)
+        handle.save(temp_in)
+
+        stream = ffmpeg.input(temp_in.name).output(temp_out.name)
+        ffmpeg.run(stream, quiet=True, overwrite_output=True)
         # Let's get the transcript of the temporary file.
-        result = model.transcribe(temp.name)
+        result = openai.Audio.transcribe("whisper-1", temp_out)
         # Now we can store the result object for this file.
         results.append({
             'filename': filename,
