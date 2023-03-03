@@ -29,7 +29,7 @@ Just reply to the voice message you want to transcribe with **!tran**
 - Editing the variables response ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can edit the header of the automatic response.
 
 ### TODO
-[ ] As the python api it's useless here, because we are no loading the models in our computer and just retrieving the data from the OpenAI API. All of this can be done from inside de node index.js file
+- [ ] As the python api it's useless here, because we are no loading the models in our computer and just retrieving the data from the OpenAI API. All of this can be done from inside de node index.js file
 
 ### BUGs
 - For now files that are older than the session can't be fetched. Solution might be to retrieve the file with some function and cache it.
