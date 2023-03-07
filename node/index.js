@@ -97,7 +97,7 @@ function GetDate(timestamp) {
 // This function handles the missing media in the chat by retrieving messages from the chat until the media is available
 async function downloadQuotedMedia(quotedMsg, messageId, chat, maxRetries = 5) {
 	let attachmentData = null;
-	let counter = 1;
+	let counter = 10;
   
 	while (!attachmentData && counter <= maxRetries) {
 	  try {
