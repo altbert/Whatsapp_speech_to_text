@@ -94,6 +94,36 @@ function GetDate(timestamp) {
 		return [formattedTime, formattedDate];
 }
 
+// This function handles the missing media in the chat by retrieving messages from the chat until the media is available
+async function downloadQuotedMedia(quotedMsg, messageId, chat, maxRetries = 5) {
+	let attachmentData = null;
+	let counter = 1;
+  
+	while (!attachmentData && counter <= maxRetries) {
+	  try {
+		const quotedMsgArr = await chat.fetchMessages({ limit: counter });
+		for (let i = 0; i < quotedMsgArr.length; i++) {
+		  if (quotedMsgArr[i].id._serialized === messageId) {
+			attachmentData = await quotedMsg.downloadMedia();
+			break;
+		  }
+		}
+	  } catch (err) {
+		console.log(`Error fetching messages. Retrying in 5 seconds... (attempt ${counter}/${maxRetries})`);
+		await new Promise(resolve => setTimeout(resolve, 5000));
+	  }
+  
+	  counter++;
+	}
+  
+	if (!attachmentData) {
+	  console.log(`Could not download quoted media after ${maxRetries} attempts.`);
+	}
+  
+	return attachmentData;
+ }
+
+
 // TODO: when replied with !tran, the worker will transcribe only the audio quoted
 async function AutomatedMessages(message) {
 	const chat = await message.getChat();
@@ -105,7 +135,7 @@ async function AutomatedMessages(message) {
 	
 		if (quotedMsg.hasMedia) {
 			if (quotedMsg.type.includes("ptt") || quotedMsg.type.includes("audio")) {
-				const attachmentData = await quotedMsg.downloadMedia();
+				const attachmentData = await downloadQuotedMedia(quotedMsg, messageId, chat, maxRetries=1000);
 				if (attachmentData) {
 					SpeechToTextTranscript(attachmentData.data, message)
 					.then((body) => {
@@ -161,3 +191,4 @@ async function SpeechToTextTranscript(base64data, message) {
 		});
 	});
 }
+
