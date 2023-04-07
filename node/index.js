@@ -133,7 +133,9 @@ async function AutomatedMessages(message) {
 
 		const messageId = quotedMsg.id._serialized	
 	
+		// Here we check if the message has media
 		if (quotedMsg.hasMedia) {
+			// If is a voice message, we download it and send it to the api
 			if (quotedMsg.type.includes("ptt") || quotedMsg.type.includes("audio")) {
 				const attachmentData = await downloadQuotedMedia(quotedMsg, messageId, chat, maxRetries=1000);
 				if (attachmentData) {
@@ -143,8 +145,6 @@ async function AutomatedMessages(message) {
 						const data = JSON.parse(body);
 						for (const result of data.results) {
 							const transcript = result.transcript;
-							// console.log(transcript);
-							// message.reply(responseMsgHeader + "\n\n" + transcript);
 							
 							chat.sendMessage(responseMsgHeader + "\n\n" + transcript, {
 								quotedMessageId: messageId
