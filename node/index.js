@@ -13,10 +13,13 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const process = require('node:process');
 
 // Setup ENV variables so it can run on docker and also as standalone
+// apiHost is the address of the api (The code to this api can be fount in api/api.py)
+// dataPath is the path where the google chrome session will be stored
 if (process.env.API_ADDRESS && process.env.CHROME_DATA_PATH) {
 	apiHost = process.env.API_ADDRESS;
 	dataPath = process.env.CHROME_DATA_PATH;
 } else {
+	// If it's not running on docker, it will use the default values
 	apiHost = "127.0.0.1";
 	dataPath = "./"
 }
@@ -167,11 +170,13 @@ async function AutomatedMessages(message) {
 
 // Text to speech function
 async function SpeechToTextTranscript(base64data, message) {
+	// Decode the base64 data (The data is a base64 string because thats the way WhatsApp.js handles media)
 	const decodedBuffer = Buffer.from(base64data, 'base64');
 
-	// Send the decoded binary file to the Flask API
+	// Send the decoded binary buffer to the Flask API
 	return new Promise((resolve, reject) => {
 		request.post({
+			// This url is the url of the Flask API that handles the transcription using Whisper
 			url: 'http://'+ apiHost +':5000',
 			formData: {
 			file: {
