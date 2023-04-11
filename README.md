@@ -1,19 +1,19 @@
 # Whatsapp Speech To Text
-Speech to text in Whatsapp using [Whisper](https://github.com/openai/whisper) and [Whatsapp-Web.js](https://github.com/pedroslopez/whatsapp-web.js), running on Docker.   
-Originally the program was using Google Cloud Speech.   
-   
+This is a Speech-to-Text application for Whatsapp that uses [Whisper](https://github.com/openai/whisper) and [Whatsapp-Web.js](https://github.com/pedroslopez/whatsapp-web.js), running on Docker
+
 <p align="left">
   <img src="https://github.com/altbert/Whatsapp_speech_to_text/raw/main/media/Screenshot.jpg" width="400" title="Example">
 </p>
    
    
 ### Description
-Once authenticated on Whatsapp Web, the worker will transcribe, using Whisper, all voice messages that you reply with "!tran".  
-For now it's only configured to transcribe from contacts saved in your contact book.  
-     
-If you you don't want to host the model directly in your computer, you can use the branch main_openai_api. This branch uses OpenAI API to transcribe the audio.
-   
-If you want to contribute just send a pull request   
+Once authenticated on Whatsapp Web, the worker will transcribe all voice messages that you reply to with the command !tran using Whisper. Currently, it is only configured to transcribe messages from contacts saved in your contact book.
+
+Originally, the program used Google Cloud Speech, but it now uses Whisper, which is a lightweight, open-source speech recognition engine.
+
+If you do not want to host the model directly on your computer, you can use the **main_openai_api** branch, which uses the OpenAI API to transcribe the audio.
+
+If you want to contribute, just send a pull request.
    
 ### Usage
 Just reply to the voice message you want to transcribe with **!tran**
