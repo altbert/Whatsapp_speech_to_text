@@ -38,7 +38,7 @@ Just reply to the voice message you want to transcribe with **!tran**
                 count: 1
                 capabilities: [gpu]
     ```
-- Editing the variables response ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can edit the header of the automatic response.
+- Editing the variables ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can setup the message header for the automatic response.
 
 ### TODO
 - [x] ~~Only transcribe if the audio is replied with "!tran"~~
