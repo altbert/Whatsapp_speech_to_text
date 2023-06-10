@@ -1,4 +1,4 @@
-FROM python:3.9.14-bullseye
+FROM python:3.10.10-bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
