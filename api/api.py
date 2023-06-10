@@ -1,12 +1,35 @@
 from flask import Flask, abort, request
-import whisper
+from whispercpp import Whisper
 from tempfile import NamedTemporaryFile
 from os import environ
+import ffmpeg
+import numpy as np
 
 # Gets the env variable configured in the docker-compose.yml file
 model_version = environ['MODEL_VERSION']
-# Load the Whisper model:
-model = whisper.load_model('tiny')
+
+# Loads Whisper module from whispercpp
+w = Whisper.from_pretrained(model_version)
+
+# Auto detect language
+w.params.language = "auto"
+
+def speech_to_text(audiofile):
+    try:
+        y, _ = (
+            ffmpeg.input(audiofile, threads=0)
+            .output("-", format="s16le", acodec="pcm_s16le", ac=1, ar=16000)
+            .run(
+                cmd=["ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True
+            )
+        )
+    except ffmpeg.Error as e:
+        raise RuntimeError(f"Failed to load audio: {e.stderr.decode()}") from e
+
+    arr = np.frombuffer(y, np.int16).flatten().astype(np.float32) / 32768.0
+
+    return w.transcribe(arr)
+
 
 app = Flask(__name__)
 
@@ -31,11 +54,11 @@ def handler():
         # The file will get deleted when it drops out of scope.
         handle.save(temp)
         # Let's get the transcript of the temporary file.
-        result = model.transcribe(temp.name)
+        result = speech_to_text(temp.name)
         # Now we can store the result object for this file.
         results.append({
             'filename': filename,
-            'transcript': result['text'],
+            'transcript': result
         })
 
     # This will be automatically converted to JSON.
