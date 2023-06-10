@@ -11,8 +11,6 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt --no-cache-dir
 
 ARG MODEL_VERSION
-# Download model file (SETUP MODEL VERSION IN docker-compose.yml FILE)
-RUN whisper --model ${MODEL_VERSION} dummy.wav; exit 0
 
 WORKDIR /usr/src/app
 
