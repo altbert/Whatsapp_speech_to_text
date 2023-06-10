@@ -40,6 +40,9 @@ Just reply to the voice message you want to transcribe with **!tran**
     ```
 - Editing the variables ```responseMsgHeader``` and ```responseMsgHeaderError``` inside the **node/index.js**. You can setup the message header for the automatic response.
 
+### Updates
+- Now using [Whispercpp](https://github.com/aarnphm/whispercpp) python bindings
+
 ### TODO
 - [x] ~~Only transcribe if the audio is replied with "!tran"~~
 - [x] ~~Send "!tran" from my chat and also transcribe the audio. For now only messages send by contacts will be transcribed.~~
