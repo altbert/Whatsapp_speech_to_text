@@ -6,11 +6,9 @@ RUN apt-get update && apt-get install -y \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+COPY ../requirements.txt requirements.txt
 # Install Whisper
-RUN pip install -U openai-whisper --no-cache-dir && \
-    pip install flask --no-cache-dir && \
-    pip install gunicorn --no-cache-dir && \
-    pip install whispercpp --no-cache-dir
+RUN pip install -r requirements.txt --no-cache-dir
 
 ARG MODEL_VERSION
 # Download model file (SETUP MODEL VERSION IN docker-compose.yml FILE)
